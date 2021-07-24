@@ -1,0 +1,165 @@
+<html>
+   <head> 
+      <title>Options Trader</title> 
+      <meta name="viewport" content="width=device-width, initial-scale=1"> 
+      <script type="text/javascript" src="https://rawgit.com/nnnick/Chart.js/v1.0.2/Chart.min.js"></script> 
+      
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.1/socket.io.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+      <style id="compiled-css" type="text/css">
+.chartWrapper {/* w w w. j a v  a2 s.co  m*/
+   position: relative;
+}
+.chartWrapper > canvas {
+   position: absolute;
+   left: 0;
+   top: 0;
+   pointer-events:none;
+}
+.chartAreaWrapper {
+   width: 1000px;
+   overflow-x: scroll;
+}
+
+
+
+      </style> 
+
+      <script>
+         function bruh(){
+            var price = {{ stock.getprices()[0][-1] }}
+               document.getElementById("price").innerHTML=price
+         }
+         
+
+      </script>
+
+      <script type="text/javascript">
+         var n = {{ x | safe }}
+         var f ={{ y | safe }}
+         
+        
+    function bruh1(x,y){
+      var ctx = document.getElementById("myChart").getContext("2d");
+         var data = {
+            labels: n,
+            datasets: [
+                {
+                    label: "My First dataset",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: f
+                }
+            ]
+        };
+        window.chart=new Chart(ctx);
+        chart.Line(data)
+        
+        
+        
+    }
+
+      
+         function dd() {
+
+            var socket = io().connect('http://127.0.0.1:5000/stockcurve/{{ id | safe }}/50d/1d');
+            window.addEventListener('popstate',function(event){
+               socket.disconnect()
+            })
+            socket.on("connect",function(){
+               console.log("CONNECTED");
+               socket.send("hello mate");
+            })
+            
+            
+
+            socket.on("message",function(msg){
+               // console.log(msg)
+               
+               if(Array.isArray(msg)){
+                  var a = msg[0]
+                  var b = msg[1]
+                  var trades = msg[2]
+                  // console.log(f)
+                  f = f.concat(a);
+                  // console.log(f)
+                  n = n.concat(b);
+                  var data = {
+            labels: n,
+            datasets: [
+                {
+                    label: "My First dataset",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: f
+                }
+            ]
+        };
+        var optionsNoAnimation = {
+    animation : false,
+    maintainAspectRatio:false,
+    
+  }
+                  chart.Line(data,optionsNoAnimation)
+
+                  // var imported = {{trades | safe}}
+                  $("ul").empty()
+                  var ind = 0
+                  for(var i=0;i<trades.length;i++){
+                  $("ul").append("<li>"+i+" "+trades[i]+"<a href='/closetrade/{{ind}}/'>Close Trade</a></li>")
+                  ind++
+                  }
+               
+               }
+               
+               
+
+               
+               
+               socket.send("a")
+            })
+            
+            
+         };
+         
+      </script>
+   </head> 
+   <body onload="bruh1({{ x | safe }},{{ y | safe }});dd();"> 
+      <div class="header">
+         Balance: {{balancex}}
+      </div>
+      <div class="chartWrapper"> 
+         <div class="chartAreaWrapper"> 
+            <canvas id="myChart" height="300" width="20000"></canvas> 
+         </div> 
+         <canvas id="myChartAxis" height="300" width="0"></canvas> 
+      </div>  
+
+
+      <span id="price" style="font:40;font-weight: bold;"></span>
+
+      <form  action="/buy/{{id}}/{{y[-1]}}" method='POST' enctype="multipart/form-data">
+      <input  type="text" name="buyvalue"  placeholder="amount"  required>
+      <input type="submit" value="BUY" style="background-color: green;">
+      </form>
+      
+      <form  action="/sell/{{id}}/{{y[-1]}}" method='POST' enctype="multipart/form-data">
+         <input  type="text" name="sellvalue"  placeholder="amount"  required>
+         <input type="submit" value="SELL" style="background-color: red;">
+         </form>
+         
+      <ul id="messages"></ul>
+      <ul>
+         
+      </ul>
+   </body>
+
+</html>

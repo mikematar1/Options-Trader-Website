@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+
+{% block body %}
+
+<div class="header">
+    <div class='logo' >
+        <p>IQ OPTION</p>
+    </div>
+    
+    <div class="log">
+        {% if not signedin %}
+        <form action="/signinn" >
+            <input type="submit" value="signin" >
+        </form>
+
+        <form action="/signup" >
+            <input  type="submit" value="signup">
+        </form>
+        {% else %}
+        <form action="/signout" >
+        <input  type="submit" value="signout">
+        </form>
+        <form action="/deposit">
+        <input type="submit" value="Deposit">
+        </form>
+        Balance: {{balancex}}
+        {% endif %}
+        
+    </div>
+</div>
+
+<div class="cta">
+
+<canvas id="myChart" width="400" height="400"></canvas>
+<!-- script for drawing the curve -->
+<script>
+var ctx = document.getElementById("myChart").getContext('2d');
+var lineChart = new Chart(ctx,{
+    label: "AAPL STOCK",
+    type:'line',
+    data:{
+        labels: {{ x1 | safe }},
+        datasets : [
+            {
+                labal: "Data Points",
+                data: {{ y1 | safe }},
+                fill: false,
+                borderColor: "rgb(75,192,192)",
+                lineTension : 0.1
+            }
+        ],
+    },
+    options: {
+        responsive : false,
+        scales: {
+            yAxes: [
+                {
+                    display: true,
+                    ticks: {
+                        maxTicksLimit: 8
+                    }
+                }
+            ]
+        }
+    }
+    
+
+}
+
+);
+</script>
+<p>Our Mission is to allow everyone to trade in the stock market.</p>
+<form action="/stocklist"><input type="submit" value="Start Trading"></form>
+</div>
+
+<div class="cta">
+
+    <canvas id="myChart1" width="400" height="400"></canvas>
+    <!-- script for drawing the curve -->
+    <script>
+    var ctx = document.getElementById("myChart1").getContext('2d');
+    var lineChart = new Chart(ctx,{
+        label: "AAPL STOCK",
+        type:'line',
+        data:{
+            labels: {{ x2 | safe }},
+            datasets : [
+                {
+                    labal: "Data Points",
+                    data: {{ y2 | safe }},
+                    fill: false,
+                    borderColor: "rgb(75,192,192)",
+                    lineTension : 0.1
+                }
+            ],
+        },
+        options: {
+            responsive : false,
+            scales: {
+                yAxes: [
+                    {
+                        display: true,
+                        ticks: {
+                            maxTicksLimit: 8
+                        }
+                    }
+                ]
+            }
+        }
+        
+    
+    }
+    
+    );
+    </script>
+    <p>The stock market was only accessible to people with bank accounts, but today you can invest with us with your cash savings!</p>
+    <form action="/stocklist"><input type="submit" value="Start Trading"></form>
+    </div>
+
+<div class="cta">
+
+    <canvas id="myChart2" width="400" height="400"></canvas>
+    <!-- script for drawing the curve -->
+    <script>
+    var ctx = document.getElementById("myChart2").getContext('2d');
+    var lineChart = new Chart(ctx,{
+        label: "AAPL STOCK",
+        type:'line',
+        data:{
+            labels: {{ x3 | safe }},
+            datasets : [
+                {
+                    labal: "Data Points",
+                    data: {{ y3 | safe }},
+                    fill: false,
+                    borderColor: "rgb(75,192,192)",
+                    lineTension : 0.1
+                }
+            ],
+        },
+        options: {
+            responsive : false,
+            scales: {
+                yAxes: [
+                    {
+                        display: true,
+                        ticks: {
+                            maxTicksLimit: 8
+                        }
+                    }
+                ]
+            }
+        }
+        
+    
+    }
+    
+    );
+    </script>
+    <p>Join the market today and may the struggles of yesterday be history!
+    </p>
+    <form action="/stocklist"><input type="submit" value="Start Trading"></form>
+    </div>
+    
+    
+{% endblock %}

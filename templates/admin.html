@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+<script>
+    function checkpassword(){
+        passw = document.getElementById("password");
+        if(passw.value == "1234"){
+            document.getElementById("adminstuff").hidden= false;
+        }
+    }
+</script>
+
+{% endblock %}
+
+
+{% block body %}
+<input type="password" id="password" placeholder="admin password">
+<input type="button" value="Sign In" onclick="checkpassword();">
+<div id="adminstuff" hidden>
+    <h1>Hello Admin</h1>
+    <form action="/adminstockadd" method='POST' enctype="multipart/form-data">
+    <input type="text" name="stockname" placeholder="stock name" required>
+    <input type="submit" value="add stock">
+    </form>
+</div>
+{% endblock %}

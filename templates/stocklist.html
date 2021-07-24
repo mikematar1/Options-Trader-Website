@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+
+
+{% endblock %}
+
+
+{% block body %}
+<div class="header">
+    Balance: {{balancex}}
+ </div>
+<ul>
+    <th>
+        <li>name</li>
+        
+    </th>
+    {% for s in stocks %}
+    <td>
+        <a href ="/stockcurve/{{s.id}}/50d/1d">{{s.name}}</a>
+    </td>
+    {% endfor %}
+</ul>
+
+{% endblock %}
